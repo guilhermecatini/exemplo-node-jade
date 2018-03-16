@@ -1,0 +1,64 @@
+extends layout
+
+block content
+
+	div.container
+		//- Form de Cadastro
+		form(method="POST", action="/update/#{data._id}")
+			div.row
+				div.col-xs-12
+					h2 Consulta de CEP
+					hr
+			div.row
+				div.col-xs-3
+					label CEP
+					input.form-control(type="text" name="cep" id="cep" value="#{data.cep || ''}")
+
+			div.row
+				div.col-xs-6
+					label Logradouro
+					input.form-control(type="text" name="logradouro" id="logradouro" value="#{data.logradouro || ''}")
+				div.col-xs-2
+					label Número
+					input.form-control(type="text" name="numero" id="numero" value="#{data.numero || ''}")
+				div.col-xs-4
+					label Bairro
+					input.form-control(type="text" name="bairro" id="bairro" value="#{data.bairro || ''}")
+
+			div.row
+				div.col-xs-6
+					label Localidade
+					input.form-control(type="text" name="localidade" id="localidade" value="#{data.localidade || ''}")
+				div.col-xs-2
+					label UF
+					input.form-control(type="text" name="uf" id="uf" value="#{data.uf || ''}")
+
+			div.row
+				div.col-xs-12
+					hr
+					button.btn.btn-default(type="button", onclick="window.location='/'") Voltar
+					input.btn.btn-success(type='submit', value='Gravar')
+
+
+	script.
+		$(document).ready(function(){
+			$('#cep').change(function(){
+				let cep = $('#cep').val();
+				if (cep.length != 8)
+					return; 
+				$.ajax({
+					method: 'POST', 
+					url: 'https://viacep.com.br/ws/'+cep+'/json/'
+				}).done(function(res){
+					if (res.erro) {
+						$('#logradouro').focus().select();
+					} else {
+						$('#logradouro').val(res.logradouro);
+						$('#bairro').val(res.bairro);
+						$('#localidade').val(res.localidade);
+						$('#uf').val(res.uf);
+						$('#numero').val('').focus();
+					}
+				});
+			});
+		});

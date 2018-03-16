@@ -1,0 +1,39 @@
+extends layout
+
+block content
+
+	div.container
+
+		div.row
+			div.col-xs-12
+				h2 Endereços
+				hr
+				a.btn.btn-primary(href="/new") Novo Cadastro
+
+		//- Tabela de Itens
+		div.row
+			div.col-xs-12
+				table.table.table-default.table-hover
+					thead
+						tr
+							th CEP
+							th Logradouro
+							th Número
+							th Bairro
+							th Localidade
+							th UF
+							th
+					tbody
+						each ax in enderecos
+							tr
+								td= ax.cep
+								td
+									a(href="/update/#{ax._id}")= ax.logradouro
+								td= ax.numero
+								td= ax.bairro
+								td= ax.localidade
+								td= ax.uf
+								td
+									form(method="POST", action="/delete/#{ax._id}")
+										button.btn.btn-danger.btn-xs(type="submit")
+											span.glyphicon.glyphicon-trash
